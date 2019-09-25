@@ -1,172 +1,47 @@
 import React from 'react';
 import { MdAddShoppingCart } from 'react-icons/md';
+import api from '../../services/api';
+import { formatPrice } from '../../util/format';
 
 import { ProductList } from './styles';
 
-export default function Home() {
-  return (
-    <ProductList>
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-nike-lunar-prime-iron-ii-masculino/72/D12-9118-172/D12-9118-172_detalhe1.jpg?resize=280:280"
-          alt="tenis"
-        />
+export default class Home extends React.Component {
+  state = {
+    products: [],
+  };
 
-        <strong>Tenis muito legal</strong>
-        <span>R$129,90</span>
+  async componentDidMount() {
+    const response = await api.get('/products');
 
-        <button type="button">
-          <div>
-            <MdAddShoppingCart size={16} color="#fff" /> 3
-          </div>
+    const data = response.data.map(product => ({
+      ...product,
+      formattedPrice: formatPrice(product.price),
+    }));
 
-          <span>Adicionar ao carrinho</span>
-        </button>
-      </li>
+    this.setState({ products: data });
+  }
 
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-nike-lunar-prime-iron-ii-masculino/72/D12-9118-172/D12-9118-172_detalhe1.jpg?resize=280:280"
-          alt="tenis"
-        />
+  render() {
+    const { products } = this.state;
+    return (
+      <ProductList>
+        {products.map(product => (
+          <li key={product.id}>
+            <img src={product.image} alt={product.title} />
 
-        <strong>Tenis muito legal</strong>
-        <span>R$129,90</span>
+            <strong>{product.title}</strong>
+            <span>{product.formattedPrice}</span>
 
-        <button type="button">
-          <div>
-            <MdAddShoppingCart size={16} color="#fff" /> 3
-          </div>
+            <button type="button">
+              <div>
+                <MdAddShoppingCart size={16} color="#fff" /> 3
+              </div>
 
-          <span>Adicionar ao carrinho</span>
-        </button>
-      </li>
-
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-nike-lunar-prime-iron-ii-masculino/72/D12-9118-172/D12-9118-172_detalhe1.jpg?resize=280:280"
-          alt="tenis"
-        />
-
-        <strong>Tenis muito legal</strong>
-        <span>R$129,90</span>
-
-        <button type="button">
-          <div>
-            <MdAddShoppingCart size={16} color="#fff" /> 3
-          </div>
-
-          <span>Adicionar ao carrinho</span>
-        </button>
-      </li>
-
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-nike-lunar-prime-iron-ii-masculino/72/D12-9118-172/D12-9118-172_detalhe1.jpg?resize=280:280"
-          alt="tenis"
-        />
-
-        <strong>Tenis muito legal</strong>
-        <span>R$129,90</span>
-
-        <button type="button">
-          <div>
-            <MdAddShoppingCart size={16} color="#fff" /> 3
-          </div>
-
-          <span>Adicionar ao carrinho</span>
-        </button>
-      </li>
-
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-nike-lunar-prime-iron-ii-masculino/72/D12-9118-172/D12-9118-172_detalhe1.jpg?resize=280:280"
-          alt="tenis"
-        />
-
-        <strong>Tenis muito legal</strong>
-        <span>R$129,90</span>
-
-        <button type="button">
-          <div>
-            <MdAddShoppingCart size={16} color="#fff" /> 3
-          </div>
-
-          <span>Adicionar ao carrinho</span>
-        </button>
-      </li>
-
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-nike-lunar-prime-iron-ii-masculino/72/D12-9118-172/D12-9118-172_detalhe1.jpg?resize=280:280"
-          alt="tenis"
-        />
-
-        <strong>Tenis muito legal</strong>
-        <span>R$129,90</span>
-
-        <button type="button">
-          <div>
-            <MdAddShoppingCart size={16} color="#fff" /> 3
-          </div>
-
-          <span>Adicionar ao carrinho</span>
-        </button>
-      </li>
-
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-nike-lunar-prime-iron-ii-masculino/72/D12-9118-172/D12-9118-172_detalhe1.jpg?resize=280:280"
-          alt="tenis"
-        />
-
-        <strong>Tenis muito legal</strong>
-        <span>R$129,90</span>
-
-        <button type="button">
-          <div>
-            <MdAddShoppingCart size={16} color="#fff" /> 3
-          </div>
-
-          <span>Adicionar ao carrinho</span>
-        </button>
-      </li>
-
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-nike-lunar-prime-iron-ii-masculino/72/D12-9118-172/D12-9118-172_detalhe1.jpg?resize=280:280"
-          alt="tenis"
-        />
-
-        <strong>Tenis muito legal</strong>
-        <span>R$129,90</span>
-
-        <button type="button">
-          <div>
-            <MdAddShoppingCart size={16} color="#fff" /> 3
-          </div>
-
-          <span>Adicionar ao carrinho</span>
-        </button>
-      </li>
-
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-nike-lunar-prime-iron-ii-masculino/72/D12-9118-172/D12-9118-172_detalhe1.jpg?resize=280:280"
-          alt="tenis"
-        />
-
-        <strong>Tenis muito legal</strong>
-        <span>R$129,90</span>
-
-        <button type="button">
-          <div>
-            <MdAddShoppingCart size={16} color="#fff" /> 3
-          </div>
-
-          <span>Adicionar ao carrinho</span>
-        </button>
-      </li>
-    </ProductList>
-  );
+              <span>Adicionar ao carrinho</span>
+            </button>
+          </li>
+        ))}
+      </ProductList>
+    );
+  }
 }
