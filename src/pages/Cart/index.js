@@ -13,7 +13,7 @@ const mapStateToProps = state => ({
   cart: state.cart,
 });
 
-export default connect(mapStateToProps)(function Cart({ cart }) {
+export default connect(mapStateToProps)(function Cart({ cart, dispatch }) {
   return (
     <Container>
       <ProductTable>
@@ -28,7 +28,7 @@ export default connect(mapStateToProps)(function Cart({ cart }) {
         </thead>
         <tbody>
           {cart.map(product => (
-            <tr>
+            <tr key={product.id}>
               <td>
                 <img src={product.image} alt={product.title} />
               </td>
@@ -51,7 +51,12 @@ export default connect(mapStateToProps)(function Cart({ cart }) {
                 <strong>R$258.80</strong>
               </td>
               <td>
-                <button type="button">
+                <button
+                  type="button"
+                  onClick={() =>
+                    dispatch({ type: 'REMOVE_FROM_CART', id: product.id })
+                  }
+                >
                   <MdDelete size={20} color="#7159c1" />
                 </button>
               </td>
