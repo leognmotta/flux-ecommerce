@@ -8,11 +8,20 @@ import {
   MdDelete,
 } from 'react-icons/md';
 import * as CartActions from '../../store/modules/cart/actions';
+import { formatPrice } from '../../util/format';
 
 import { Container, ProductTable, Total } from './styles';
 
 const mapStateToProps = state => ({
-  cart: state.cart,
+  cart: state.cart.map(product => ({
+    ...product,
+    subtotal: formatPrice(product.price * product.amount),
+  })),
+  total: formatPrice(
+    state.cart.reduce((total, product) => {
+      return total + product.price * product.amount;
+    }, 0)
+  ),
 });
 
 const mapDispatchToProps = dispatch =>
@@ -21,7 +30,15 @@ const mapDispatchToProps = dispatch =>
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(function Cart({ cart, removeFromCart }) {
+)(function Cart({ cart, total, removeFromCart, updateAmount }) {
+  function handleIncrement(product) {
+    updateAmount(product.id, product.amount + 1);
+  }
+
+  function handleDecrement(product) {
+    updateAmount(product.id, product.amount - 1);
+  }
+
   return (
     <Container>
       <ProductTable>
@@ -46,17 +63,23 @@ export default connect(
               </td>
               <td>
                 <div>
-                  <button type="button">
+                  <button
+                    type="button"
+                    onClick={() => handleDecrement(product)}
+                  >
                     <MdRemoveCircleOutline size={20} color="#7159c1" />
                   </button>
                   <input type="number" readOnly value={product.amount} />
-                  <button type="button">
+                  <button
+                    type="button"
+                    onClick={() => handleIncrement(product)}
+                  >
                     <MdAddCircleOutline size={20} color="#7159c1" />
                   </button>
                 </div>
               </td>
               <td>
-                <strong>R$258.80</strong>
+                <strong>{product.subtotal}</strong>
               </td>
               <td>
                 <button
@@ -76,7 +99,7 @@ export default connect(
 
         <Total>
           <span>TOTAL</span>
-          <strong>R$ 1920,28</strong>
+          <strong>{total}</strong>
         </Total>
       </footer>
     </Container>
