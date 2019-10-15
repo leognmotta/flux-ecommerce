@@ -10,12 +10,10 @@ function* addToCart({ id }) {
     state.cart.find(product => product.id === id)
   );
 
-  const stock = call(api.get, `/stock/${id}`);
+  const stock = yield call(api.get, `/stock/${id}`);
 
   const stockAmount = stock.data.amount;
   const currentAmount = productExists ? productExists.amount : 0;
-
-  console.tron.log(stockAmount);
 
   const amount = currentAmount + 1;
 
