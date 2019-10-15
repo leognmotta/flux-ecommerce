@@ -30,7 +30,7 @@ const mapDispatchToProps = dispatch =>
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(function Cart({ cart, total, removeFromCart, updateAmount }) {
+)(function Cart({ cart = [], total, removeFromCart, updateAmount }) {
   function handleIncrement(product) {
     updateAmount(product.id, product.amount + 1);
   }
@@ -41,67 +41,73 @@ export default connect(
 
   return (
     <Container>
-      <ProductTable>
-        <thead>
-          <tr>
-            <th />
-            <th>PRODUCT</th>
-            <th>QTD</th>
-            <th>SUBTOTAL</th>
-            <th />
-          </tr>
-        </thead>
-        <tbody>
-          {cart.map(product => (
-            <tr key={product.id}>
-              <td>
-                <img src={product.image} alt={product.title} />
-              </td>
-              <td>
-                <strong>{product.title}</strong>
-                <span>{product.formattedPrice}</span>
-              </td>
-              <td>
-                <div>
-                  <button
-                    type="button"
-                    onClick={() => handleDecrement(product)}
-                  >
-                    <MdRemoveCircleOutline size={20} color="#7159c1" />
-                  </button>
-                  <input type="number" readOnly value={product.amount} />
-                  <button
-                    type="button"
-                    onClick={() => handleIncrement(product)}
-                  >
-                    <MdAddCircleOutline size={20} color="#7159c1" />
-                  </button>
-                </div>
-              </td>
-              <td>
-                <strong>{product.subtotal}</strong>
-              </td>
-              <td>
-                <button
-                  type="button"
-                  onClick={() => removeFromCart(product.id)}
-                >
-                  <MdDelete size={20} color="#7159c1" />
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </ProductTable>
+      {cart.length > 0 ? (
+        <>
+          <ProductTable>
+            <thead>
+              <tr>
+                <th />
+                <th>PRODUCT</th>
+                <th>QTD</th>
+                <th>SUBTOTAL</th>
+                <th />
+              </tr>
+            </thead>
+            <tbody>
+              {cart.map(product => (
+                <tr key={product.id}>
+                  <td>
+                    <img src={product.image} alt={product.title} />
+                  </td>
+                  <td>
+                    <strong>{product.title}</strong>
+                    <span>{product.formattedPrice}</span>
+                  </td>
+                  <td>
+                    <div>
+                      <button
+                        type="button"
+                        onClick={() => handleDecrement(product)}
+                      >
+                        <MdRemoveCircleOutline size={20} color="#7159c1" />
+                      </button>
+                      <input type="number" readOnly value={product.amount} />
+                      <button
+                        type="button"
+                        onClick={() => handleIncrement(product)}
+                      >
+                        <MdAddCircleOutline size={20} color="#7159c1" />
+                      </button>
+                    </div>
+                  </td>
+                  <td>
+                    <strong>{product.subtotal}</strong>
+                  </td>
+                  <td>
+                    <button
+                      type="button"
+                      onClick={() => removeFromCart(product.id)}
+                    >
+                      <MdDelete size={20} color="#7159c1" />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </ProductTable>
 
-      <footer>
-        <button type="button">Place Order</button>
+          <footer>
+            <button type="button">Place Order</button>
 
-        <Total>
-          <span>TOTAL</span>
-          <strong>{total}</strong>
-        </Total>
-      </footer>
+            <Total>
+              <span>TOTAL</span>
+              <strong>{total}</strong>
+            </Total>
+          </footer>
+        </>
+      ) : (
+        <h1>Sorry, but your cart is empty :(</h1>
+      )}
     </Container>
   );
 });
