@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { MdAddShoppingCart } from 'react-icons/md';
@@ -22,13 +22,11 @@ const mapDispatchToProps = dispatch =>
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(
-  class Home extends React.Component {
-    state = {
-      products: [],
-    };
+)(function Home({ amount, addToCartRequest }) {
+  const [products, setProducts] = useState([]);
 
-    async componentDidMount() {
+  useEffect(() => {
+    async function loadProducts() {
       const response = await api.get('/products');
 
       const data = response.data.map(product => ({
@@ -36,42 +34,35 @@ export default connect(
         formattedPrice: formatPrice(product.price),
       }));
 
-      this.setState({ products: data });
+      setProducts(data);
     }
 
-    handleAddProduct = id => {
-      const { addToCartRequest } = this.props;
+    loadProducts();
+  }, []);
 
-      addToCartRequest(id);
-    };
-
-    render() {
-      const { products } = this.state;
-      const { amount } = this.props;
-      return (
-        <ProductList>
-          {products.map(product => (
-            <li key={product.id}>
-              <img src={product.image} alt={product.title} />
-
-              <strong>{product.title}</strong>
-              <span>{product.formattedPrice}</span>
-
-              <button
-                type="button"
-                onClick={() => this.handleAddProduct(product.id)}
-              >
-                <div>
-                  <MdAddShoppingCart size={16} color="#fff" />{' '}
-                  {amount[product.id] || 0}
-                </div>
-
-                <span>Adicionar ao carrinho</span>
-              </button>
-            </li>
-          ))}
-        </ProductList>
-      );
-    }
+  function handleAddProduct(id) {
+    addToCartRequest(id);
   }
-);
+
+  return (
+    <ProductList>
+      {products.map(product => (
+        <li key={product.id}>
+          <img src={product.image} alt={product.title} />
+
+          <strong>{product.title}</strong>
+          <span>{product.formattedPrice}</span>
+
+          <button type="button" onClick={() => handleAddProduct(product.id)}>
+            <div>
+              <MdAddShoppingCart size={16} color="#fff" />{' '}
+              {amount[product.id] || 0}
+            </div>
+
+            <span>Adicionar ao carrinho</span>
+          </button>
+        </li>
+      ))}
+    </ProductList>
+  );
+});
