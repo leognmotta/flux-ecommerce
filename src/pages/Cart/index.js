@@ -30,13 +30,13 @@ const mapDispatchToProps = dispatch =>
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(function Cart({ cart = [], total, removeFromCart, updateAmount }) {
+)(function Cart({ cart = [], total, removeFromCart, updateAmountRequest }) {
   function handleIncrement(product) {
-    updateAmount(product.id, product.amount + 1);
+    updateAmountRequest(product.id, product.amount + 1);
   }
 
   function handleDecrement(product) {
-    updateAmount(product.id, product.amount - 1);
+    updateAmountRequest(product.id, product.amount - 1);
   }
 
   return (
